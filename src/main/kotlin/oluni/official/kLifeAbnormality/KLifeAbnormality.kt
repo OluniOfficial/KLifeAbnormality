@@ -1,26 +1,23 @@
 package oluni.official.kLifeAbnormality
 
-import oluni.official.kLifeAbnormality.zones.Zone
-import oluni.official.kLifeAbnormality.zones.listeners.Testing
-import oluni.official.kLifeAbnormality.zones.listeners.ZoneDamage
+import oluni.official.kLifeAbnormality.zones.listeners.FlowerPlace
+import oluni.official.kLifeAbnormality.zones.listeners.ModelsListener
 import oluni.official.kLifeAbnormality.zones.mechanic.AbnormalitySpread
 import oluni.official.kLifeAbnormality.zones.mechanic.Particles
 import oluni.official.kLifeAbnormality.zones.spawn.ZoneRunnable
 import oluni.official.kLifeAbnormality.zones.spawn.ZoneSpawning
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 class KLifeAbnormality : JavaPlugin() {
 
     override fun onEnable() {
-        val zone = Zone()
         val particle = Particles(this)
-        val zoneSpawning = ZoneSpawning(particle, zone)
+        val zoneSpawning = ZoneSpawning(particle)
         val zoneRunnable = ZoneRunnable(zoneSpawning)
-        val abnormalitySpread = AbnormalitySpread(zone)
+        val abnormalitySpread = AbnormalitySpread()
         zoneRunnable.runTaskTimer(this, 0L, 1200L)
-        Bukkit.getPluginManager().registerEvents(ZoneDamage(), this)
-        Bukkit.getPluginManager().registerEvents(Testing(zoneSpawning), this)
+        server.pluginManager.registerEvents(ModelsListener(), this)
+        server.pluginManager.registerEvents(FlowerPlace(), this)
         abnormalitySpread.runTaskTimer(this, 24000L, 24000L)
     }
 }

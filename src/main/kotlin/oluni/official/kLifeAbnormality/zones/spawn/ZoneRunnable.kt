@@ -5,7 +5,7 @@ import org.bukkit.scheduler.BukkitRunnable
 
 class ZoneRunnable(private val zoneSpawning: ZoneSpawning): BukkitRunnable() {
     override fun run() {
-        Bukkit.getOnlinePlayers().firstOrNull()?.let { player ->
+        Bukkit.getOnlinePlayers().randomOrNull()?.let { player ->
             zoneSpawning.findLocationNearPlayer(player) }
     }
 }

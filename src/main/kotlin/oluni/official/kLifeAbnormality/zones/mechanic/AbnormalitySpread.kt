@@ -1,81 +1,61 @@
 package oluni.official.kLifeAbnormality.zones.mechanic
 
-import oluni.official.kLifeAbnormality.zones.Zone
+import oluni.official.kLifeAbnormality.extensions.isAnomaly
+import oluni.official.kLifeAbnormality.extensions.isFlower
+import oluni.official.kLifeAbnormality.extensions.isGrass
+import oluni.official.kLifeAbnormality.extensions.isTallFlower
+import oluni.official.kLifeAbnormality.models.BlockEntity
+import oluni.official.kLifeAbnormality.models.list.CustomBlocks
+import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.block.Block
 import org.bukkit.block.BlockFace
+import org.bukkit.entity.ItemDisplay
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
-import kotlin.math.sqrt
 
-class AbnormalitySpread(private val zone: Zone): BukkitRunnable() {
-    private val flowers = setOf(
-        Material.DANDELION,
-        Material.POPPY,
-        Material.BLUE_ORCHID,
-        Material.ALLIUM,
-        Material.AZURE_BLUET,
-        Material.RED_TULIP,
-        Material.ORANGE_TULIP,
-        Material.WHITE_TULIP,
-        Material.PINK_TULIP,
-        Material.OXEYE_DAISY,
-        Material.CORNFLOWER,
-        Material.LILY_OF_THE_VALLEY,
-        Material.TORCHFLOWER,
-        Material.WITHER_ROSE,
-        Material.SHORT_GRASS
+class AbnormalitySpread : BukkitRunnable() {
+    private val entityIdKey = NamespacedKey("mysticism", "block_entity_id")
+    private val offsets = listOf(
+        BlockFace.NORTH, BlockFace.SOUTH,
+        BlockFace.EAST, BlockFace.WEST
     )
-    private val tallFlowers = setOf(
-        Material.SUNFLOWER,
-        Material.LILAC,
-        Material.ROSE_BUSH,
-        Material.PEONY,
-        Material.TALL_GRASS,
-        Material.LARGE_FERN,
-        Material.PITCHER_PLANT,
-        Material.SWEET_BERRY_BUSH,
-        Material.AZALEA,
-        Material.FLOWERING_AZALEA
-    )
-    private val circleOffsets = (-2..2).flatMap { x ->
-        (-2..2).map { z -> x to z }
-    }.filter { (x, z) -> sqrt((x * x + z * z).toDouble()) <= 2.5 }
-    val offsets = listOf(
-        1 to 0,
-        -1 to 0,
-        0 to 1,
-        0 to -1
-    )
+
     override fun run() {
-        for (center in zone.getZones()) {
-            for ((xOffset, zOffset) in circleOffsets) {
-                with(center) {
-                    val block = block.getRelative(xOffset, 0, zOffset)
-                    if (block.type == Material.MYCELIUM) {
-                        spread(block)
-                    }
+        for (world in Bukkit.getWorlds()) {
+            for (entity in world.entities) {
+                if (entity !is ItemDisplay) continue
+                val id = entity.persistentDataContainer.get(entityIdKey, PersistentDataType.STRING)
+                if (id == CustomBlocks.ANOMALY_DIRT.id) {
+                    val sourceBlock = entity.location.block
+                    spread(sourceBlock)
                 }
             }
         }
     }
 
-    fun spread(sourceBlock: Block) {
-        for ((dx, dz) in offsets) {
-            val target = sourceBlock.getRelative(dx, 0, dz)
-            if (target.type == Material.GRASS_BLOCK) {
-                target.type = Material.MYCELIUM
-
+    private fun spread(source: Block) {
+        for (face in offsets) {
+            val target = source.getRelative(face)
+            if (target.isGrass() && !target.isAnomaly()) {
+                BlockEntity(target.location, CustomBlocks.ANOMALY_DIRT)
                 val plant = target.getRelative(BlockFace.UP)
                 when {
-                    isFlower(plant.type) -> plant.type = Material.WITHER_ROSE
-                    isTall(plant.type) -> {
-                        plant.type = Material.DEAD_BUSH
-                        plant.getRelative(BlockFace.UP).type = Material.AIR
+                    plant.isFlower() -> {
+                        plant.type = Material.AIR
+                        BlockEntity(plant.location, CustomBlocks.ANOMALY_SHORT_GRASS)
+                    }
+                    plant.isTallFlower() -> {
+                        val top = plant.getRelative(BlockFace.UP)
+                        plant.type = Material.AIR
+                        if (top.type == Material.TALL_GRASS || top.type == Material.LARGE_FERN || top.isTallFlower()) {
+                            top.type = Material.AIR
+                        }
+                        BlockEntity(plant.location, CustomBlocks.ANOMALY_KOREN)
                     }
                 }
             }
         }
     }
-    fun isFlower(material: Material): Boolean = material in flowers
-    fun isTall(material: Material): Boolean = material in tallFlowers
 }
