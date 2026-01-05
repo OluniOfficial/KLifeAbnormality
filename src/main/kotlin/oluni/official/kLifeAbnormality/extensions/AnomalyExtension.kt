@@ -45,11 +45,7 @@ private val grassesBlocks = setOf(
 )
 private val replaceableBlocks = setOf(
     Material.GRASS_BLOCK, Material.DIRT, Material.PODZOL, Material.DIRT_PATH,
-    Material.COARSE_DIRT, Material.ROOTED_DIRT, Material.FARMLAND, Material.MUD,
-    Material.MYCELIUM, Material.CLAY, Material.MOSS_BLOCK,
-    Material.STONE, Material.COBBLESTONE, Material.ANDESITE, Material.DIORITE,
-    Material.GRANITE, Material.TUFF, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE,
-    Material.SAND, Material.RED_SAND, Material.GRAVEL
+    Material.COARSE_DIRT, Material.ROOTED_DIRT, Material.FARMLAND, Material.MUD, Material.MOSS_BLOCK
 )
 
 fun Block.isReplaceableBlock(): Boolean = type in replaceableBlocks
