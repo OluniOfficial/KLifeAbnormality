@@ -1,0 +1,77 @@
+# What should im write to this line?
+
+# Timers
+# Таймеры для разных действий. Время указывается в секундах.
+timer:
+  zone-spawn: 60 # минута. Это время, с какой переодичностью будут появляться зоны. Появилась зона -> время zone-spawn -> появилась зона.
+  spread: 500 # 500 секунд - 10000 тиков. Разрастание н-дёрна.
+
+# Настройки списков блоков.
+blocks:
+  grasses: # Какие блоки при спавне зоны будут заменяться на н-дёрн. Так же и при распостранении н-дёрна.
+    - GRASS_BLOCK
+    - PODZOL
+    - DIRT_PATH
+    - DIRT
+    - COARSE_DIRT
+    - ROOTED_DIRT
+    - FARMLAND
+    - MUD
+    - MOSS_BLOCK
+    -
+  flowers: # Обычные цветы, саженцы, грибы и прочая мелкая растительность.
+    - DANDELION
+    - POPPY
+    - BLUE_ORCHID
+    - ALLIUM
+    - AZURE_BLUET
+    - RED_TULIP
+    - ORANGE_TULIP
+    - WHITE_TULIP
+    - PINK_TULIP
+    - OXEYE_DAISY
+    - CORNFLOWER
+    - LILY_OF_THE_VALLEY
+    - WITHER_ROSE
+    - FERN
+    - DEAD_BUSH
+    - TORCHFLOWER
+    - PINK_PETALS
+    - MOSS_CARPET
+    - OAK_SAPLING
+    - SPRUCE_SAPLING
+    - BIRCH_SAPLING
+    - JUNGLE_SAPLING
+    - ACACIA_SAPLING
+    - DARK_OAK_SAPLING
+    - CHERRY_SAPLING
+    - MANGROVE_PROPAGULE
+    - BAMBOO_SAPLING
+    - PALE_OAK_SAPLING
+    - BROWN_MUSHROOM
+    - RED_MUSHROOM
+    - WARPED_FUNGUS
+    - CRIMSON_FUNGUS
+    - SPORE_BLOSSOM
+    - SUGAR_CANE
+    - PITCHER_POD
+    - LILY_PAD
+    - OPEN_EYEBLOSSOM
+    - CLOSED_EYEBLOSSOM
+
+  tall-flowers: # Высокие цветы, кусты и крупные растения.
+    - SUNFLOWER
+    - LILAC
+    - ROSE_BUSH
+    - PEONY
+    - LARGE_FERN
+    - PITCHER_PLANT
+    - SWEET_BERRY_BUSH
+    - CAVE_VINES
+    - AZALEA
+    - FLOWERING_AZALEA
+    - SMALL_DRIPLEAF
+    - BIG_DRIPLEAF
+    - BAMBOO
+    - PUMPKIN_STEM
+    - MELON_STEM

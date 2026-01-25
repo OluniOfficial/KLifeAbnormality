@@ -2,7 +2,7 @@ package oluni.official.bioDistortion.models
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
-import oluni.official.bioDistortion.BioDistortion.Companion.MYSTICISM
+import oluni.official.bioDistortion.extensions.MYSTICISM
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
